@@ -4,6 +4,28 @@ import 'package:flutter/widgets.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
+
+final String databaseName = 'devices';
+
+void connectDatabase(String databaseName) async {
+  // Avoid errors caused by flutter upgrade.
+  // Importing 'package:flutter/widgets.dart' is required.
+  WidgetsFlutterBinding.ensureInitialized();
+  final Future<Database> database = openDatabase(
+    // Set the path to the database. Note: Using the `join` function from the
+    // `path` package is best practice to ensure the path is correctly
+    // constructed for each platform.
+      join(await getDatabasesPath(), databaseName+'.db'),
+  );
+ }
+
+Future<void> initDatabase(Device device) async {
+  // Get a reference to the database.
+  final Database db = await database;
+
+
+}
+
 void sqliteTest() async {
   // Avoid errors caused by flutter upgrade.
   // Importing 'package:flutter/widgets.dart' is required.
@@ -13,11 +35,11 @@ void sqliteTest() async {
     // Set the path to the database. Note: Using the `join` function from the
     // `path` package is best practice to ensure the path is correctly
     // constructed for each platform.
-    join(await getDatabasesPath(), 'doggie_database.db'),
+    join(await getDatabasesPath(), 'devices.db'),
     // When the database is first created, create a table to store dogs.
     onCreate: (db, version) {
       return db.execute(
-        "CREATE TABLE dogs(id INTEGER PRIMARY KEY, name TEXT, age INTEGER)",
+        "CREATE TABLE devices(id INTEGER PRIMARY KEY, deviceId INTEGER, deviceName TEXT)",
       );
     },
     // Set the version. This executes the onCreate function and provides a
@@ -25,7 +47,7 @@ void sqliteTest() async {
     version: 1,
   );
 
-  Future<void> insertDog(Dog dog) async {
+  Future<void> insertDevice(Device device) async {
     // Get a reference to the database.
     final Database db = await database;
 
@@ -33,37 +55,37 @@ void sqliteTest() async {
     // `conflictAlgorithm`. In this case, if the same dog is inserted
     // multiple times, it replaces the previous data.
     await db.insert(
-      'dogs',
-      dog.toMap(),
+      'devices',
+      devices.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
 
-  Future<List<Dog>> dogs() async {
+  Future<List<Device>> devices() async {
     // Get a reference to the database.
     final Database db = await database;
 
     // Query the table for all The Dogs.
-    final List<Map<String, dynamic>> maps = await db.query('dogs');
+    final List<Map<String, dynamic>> maps = await db.query('devices');
 
     // Convert the List<Map<String, dynamic> into a List<Dog>.
     return List.generate(maps.length, (i) {
-      return Dog(
+      return Device(
         id: maps[i]['id'],
-        name: maps[i]['name'],
-        age: maps[i]['age'],
+        deviceId: maps[i]['deviceId'],
+        deviceName: maps[i]['deviceName'],
       );
     });
   }
 
-  Future<void> updateDog(Dog dog) async {
+  Future<void> updateDevice(Device device) async {
     // Get a reference to the database.
     final db = await database;
 
     // Update the given Dog.
     await db.update(
-      'dogs',
-      dog.toMap(),
+      'devices',
+      device.toMap(),
       // Ensure that the Dog has a matching id.
       where: "id = ?",
       // Pass the Dog's id as a whereArg to prevent SQL injection.
@@ -115,18 +137,19 @@ void sqliteTest() async {
   print(await dogs());
 }
 
-class Dog {
+class Device {
   final int id;
-  final String name;
-  final int age;
+  final int deviceId;
+  final String deviceName;
 
-  Dog({this.id, this.name, this.age});
+
+  Device({this.id, this.deviceId, this.deviceName});
 
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'name': name,
-      'age': age,
+      'deviceId': deviceId,
+      'deviceName': deviceName,
     };
   }
 
@@ -134,6 +157,6 @@ class Dog {
   // each dog when using the print statement.
   @override
   String toString() {
-    return 'Dog{id: $id, name: $name, age: $age}';
+    return 'Dog{id: $id, name: $deviceName, age: $deviceId}';
   }
 }
