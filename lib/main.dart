@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:sbld/tcpip.dart';
 
 import 'sqlite.dart';
+import 'devices.dart';
+
+Device mydevice = Device(id: 1, ipAddress: "192.168.0.45");
+double _currentSliderValue = 50;
+String bright = '50';
 
 void main() {
   runApp(MyApp());
@@ -62,7 +68,10 @@ class _MyHomePageState extends State<MyHomePage> {
       // _counter without calling setState(), then the build method would not be
       // called again, and so nothing would appear to happen.
       _counter++;
-      sqliteTest();
+      //tcpSend('192.168.0.45', 55443, '{ "id": 1, "method": "set_power", "params":["on", "smooth", 500]}\r\n');
+      tcpSend('${mydevice.ipAddress}', 55443, '{"id":${mydevice.id},"method":"toggle","params":[]}\r\n');
+      tcpSend('${mydevice.ipAddress}', 55443, '{"id":${mydevice.id},"method":"set_bright","params":[$bright, "smooth", 500]}\r\n');
+      //sqliteTest();
     });
   }
 
@@ -107,13 +116,32 @@ class _MyHomePageState extends State<MyHomePage> {
               '$_counter',
               style: Theme.of(context).textTheme.headline4,
             ),
+            Text(
+              '${mydevice.ipAddress}'
+            ),
+            Slider(
+              value: _currentSliderValue,
+              min: 1,
+              max: 100,
+              // divisions: 5,
+              label: _currentSliderValue.round().toString(),
+              onChanged: (double value) {
+                setState(() {
+                  _currentSliderValue = value;
+                  bright = _currentSliderValue.toInt().toString();
+
+
+
+                });
+              },
+            ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,
         tooltip: 'Increment',
-        child: Icon(Icons.add),
+        child: Icon(Icons.lightbulb),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
