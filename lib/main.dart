@@ -70,7 +70,7 @@ class _MyHomePageState extends State<MyHomePage> {
       _counter++;
       //tcpSend('192.168.0.45', 55443, '{ "id": 1, "method": "set_power", "params":["on", "smooth", 500]}\r\n');
       tcpSend('${mydevice.ipAddress}', 55443, '{"id":${mydevice.id},"method":"toggle","params":[]}\r\n');
-      tcpSend('${mydevice.ipAddress}', 55443, '{"id":${mydevice.id},"method":"set_bright","params":[$bright, "smooth", 500]}\r\n');
+      // tcpSend('${mydevice.ipAddress}', 55443, '{"id":${mydevice.id},"method":"set_bright","params":[$bright, "smooth", 500]}\r\n');
       //sqliteTest();
     });
   }
@@ -129,10 +129,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 setState(() {
                   _currentSliderValue = value;
                   bright = _currentSliderValue.toInt().toString();
-
-
-
                 });
+              },
+              onChangeEnd: (double value) {
+                tcpSend('${mydevice.ipAddress}', 55443, '{"id":${mydevice.id},"method":"set_bright","params":[$bright, "smooth", 500]}\r\n');
               },
             ),
           ],
