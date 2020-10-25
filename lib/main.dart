@@ -69,7 +69,8 @@ class _MyHomePageState extends State<MyHomePage> {
       // called again, and so nothing would appear to happen.
       _counter++;
       //tcpSend('192.168.0.45', 55443, '{ "id": 1, "method": "set_power", "params":["on", "smooth", 500]}\r\n');
-      tcpSend('${mydevice.ipAddress}', 55443, '{"id":${mydevice.id},"method":"toggle","params":[]}\r\n');
+      tcpSend('${mydevice.ipAddress}', 55443,
+          '{"id":${mydevice.id},"method":"toggle","params":[]}\r\n');
       // tcpSend('${mydevice.ipAddress}', 55443, '{"id":${mydevice.id},"method":"set_bright","params":[$bright, "smooth", 500]}\r\n');
       //sqliteTest();
     });
@@ -90,7 +91,12 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       drawer: Drawer(
-        child: Text ('Siema')
+        child: DrawerHeader(
+          child: Text('Options'),
+          decoration: BoxDecoration(
+            color: Colors.blue,
+          ),
+        ),
       ),
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
@@ -119,9 +125,7 @@ class _MyHomePageState extends State<MyHomePage> {
               '$_counter',
               style: Theme.of(context).textTheme.headline4,
             ),
-            Text(
-              '${mydevice.ipAddress}'
-            ),
+            Text('${mydevice.ipAddress}'),
             Slider(
               value: _currentSliderValue,
               min: 1,
@@ -135,7 +139,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 });
               },
               onChangeEnd: (double value) {
-                tcpSend('${mydevice.ipAddress}', 55443, '{"id":${mydevice.id},"method":"set_bright","params":[$bright, "smooth", 500]}\r\n');
+                tcpSend('${mydevice.ipAddress}', 55443,
+                    '{"id":${mydevice.id},"method":"set_bright","params":[$bright, "smooth", 500]}\r\n');
               },
             ),
           ],
