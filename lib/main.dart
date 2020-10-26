@@ -90,11 +90,18 @@ class _MyHomePageState extends State<MyHomePage> {
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
-      drawer: Drawer(
-        child: DrawerHeader(
-          child: Text('Options'),
-          decoration: BoxDecoration(
-            color: Colors.blue,
+      drawer: Container(
+        width: 200,
+        child: ClipRRect(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20.0), bottom: Radius.circular(20.0) ),
+          child: Drawer(
+            child: DrawerHeader(
+              duration: Duration(milliseconds: 1000),
+              child: Text('Options'),
+             // decoration: BoxDecoration(
+            //    color: Colors.blue,
+           //   ),
+            ),
           ),
         ),
       ),
