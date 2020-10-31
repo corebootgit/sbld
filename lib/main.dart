@@ -97,7 +97,27 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Drawer(
             child: DrawerHeader(
               duration: Duration(milliseconds: 1000),
-              child: Text('Options'),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ElevatedButton (
+                    child: Text('Options'),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => OptionsRoute()),
+                      );
+                    },
+                  ),
+                  ElevatedButton (
+                    child: Text('Exit'),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                ],
+              )
              // decoration: BoxDecoration(
             //    color: Colors.blue,
            //   ),
@@ -158,6 +178,26 @@ class _MyHomePageState extends State<MyHomePage> {
         tooltip: 'Increment',
         child: Icon(Icons.lightbulb),
       ), // This trailing comma makes auto-formatting nicer for build methods.
+    );
+  }
+}
+
+class OptionsRoute extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Second Route"),
+      ),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () {
+            // Navigate back to first route when tapped.
+            Navigator.pop(context);
+          },
+          child: Text('Go back!'),
+        ),
+      ),
     );
   }
 }
