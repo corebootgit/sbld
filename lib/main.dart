@@ -7,6 +7,8 @@ import 'devices.dart';
 Device mydevice = Device(id: 1, ipAddress: "192.168.0.45");
 double _currentSliderValue = 50;
 String bright = '50';
+bool _switchValue = false;
+
 
 void main() {
   runApp(MyApp());
@@ -73,6 +75,7 @@ class _MyHomePageState extends State<MyHomePage> {
           '{"id":${mydevice.id},"method":"toggle","params":[]}\r\n');
       // tcpSend('${mydevice.ipAddress}', 55443, '{"id":${mydevice.id},"method":"set_bright","params":[$bright, "smooth", 500]}\r\n');
       //sqliteTest();
+
     });
   }
 
@@ -145,14 +148,6 @@ class _MyHomePageState extends State<MyHomePage> {
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-            Text('${mydevice.ipAddress}'),
             Slider(
               value: _currentSliderValue,
               min: 1,
@@ -170,6 +165,32 @@ class _MyHomePageState extends State<MyHomePage> {
                     '{"id":${mydevice.id},"method":"set_bright","params":[$bright, "smooth", 500]}\r\n');
               },
             ),
+            Text(
+              'You have pushed the button this many times:',
+            ),
+            Text(
+              '$_counter',
+              style: Theme.of(context).textTheme.headline4,
+            ),
+            Text('${mydevice.ipAddress}'),
+            Switch(
+              value: _switchValue,
+              onChanged: (bool value) {
+                setState(() {
+                  _switchValue = value;
+                });
+
+                if(value){
+                  tcpSend('${mydevice.ipAddress}', 55443,
+                      '{"id":${mydevice.id},"method":"set_power","params":["on", "smooth", 500]}\r\n');
+                }
+                else {
+                  tcpSend('${mydevice.ipAddress}', 55443,
+                      '{"id":${mydevice.id},"method":"set_power","params":["off", "smooth", 500]}\r\n');
+                }
+              },
+
+            )
           ],
         ),
       ),
