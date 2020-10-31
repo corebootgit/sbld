@@ -113,12 +113,25 @@ class _MyHomePageState extends State<MyHomePage> {
                       );
                     },
                   ),
-                  ElevatedButton (
-                    child: Text('Exit'),
-                    onPressed: () {
-                      Navigator.pop(context);
+
+                  Switch(
+                    value: _switchValue,
+                    onChanged: (bool value) {
+                      setState(() {
+                        _switchValue = value;
+                      });
+
+                      if(value){
+                        tcpSend('${mydevice.ipAddress}', 55443,
+                            '{"id":${mydevice.id},"method":"set_power","params":["on", "smooth", 500]}\r\n');
+                      }
+                      else {
+                        tcpSend('${mydevice.ipAddress}', 55443,
+                            '{"id":${mydevice.id},"method":"set_power","params":["off", "smooth", 500]}\r\n');
+                      }
                     },
-                  ),
+
+                  )
                 ],
               )
              // decoration: BoxDecoration(
