@@ -1,3 +1,6 @@
+import 'dart:ui';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sbld/tcpip.dart';
 
@@ -94,50 +97,93 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       drawer: Container(
-        width: 200,
-        child: ClipRRect(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20.0), bottom: Radius.circular(20.0) ),
-          child: Drawer(
-            child: DrawerHeader(
-              duration: Duration(milliseconds: 1000),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ElevatedButton (
-                    child: Text('Options'),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => OptionsRoute()),
-                      );
-                    },
+        width: 150,
+        child: Drawer(
+          child: DrawerHeader(
+            duration: Duration(milliseconds: 1000),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget> [
+                Container(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: Icon(
+                          Icons.lightbulb_outline_rounded,
+                          color: Colors.red,
+
+                        ),
+                      ),
+                      Text('Yeelight', style: TextStyle(color: Colors.red)),
+                    ],
                   ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+                  child: Container(
+                    color: Colors.grey,
+                    height: 1,
+                  ),
+                ),
+                FlatButton.icon(
+                  icon: Icon(Icons.search),
+                  label: Text('Search'),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => OptionsRoute()),
+                    );
+                  },
 
-                  Switch(
-                    value: _switchValue,
-                    onChanged: (bool value) {
-                      setState(() {
-                        _switchValue = value;
-                      });
+                ),
+                FlatButton.icon(
+                  icon: Icon(Icons.settings),
+                  label: Text('Options'),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => OptionsRoute()),
+                    );
+                  },
 
-                      if(value){
-                        tcpSend('${mydevice.ipAddress}', 55443,
-                            '{"id":${mydevice.id},"method":"set_power","params":["on", "smooth", 500]}\r\n');
-                      }
-                      else {
-                        tcpSend('${mydevice.ipAddress}', 55443,
-                            '{"id":${mydevice.id},"method":"set_power","params":["off", "smooth", 500]}\r\n');
-                      }
-                    },
+                ),
+                FlatButton.icon(
+                  icon: Icon(Icons.info_outlined),
+                  label: Text('About'),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => OptionsRoute()),
+                    );
+                  },
 
-                  )
-                ],
-              )
-             // decoration: BoxDecoration(
-            //    color: Colors.blue,
-           //   ),
-            ),
+                ),
+
+                Switch(
+                  value: _switchValue,
+                  onChanged: (bool value) {
+                    setState(() {
+                      _switchValue = value;
+                    });
+
+                    if(value){
+                      tcpSend('${mydevice.ipAddress}', 55443,
+                          '{"id":${mydevice.id},"method":"set_power","params":["on", "smooth", 500]}\r\n');
+                    }
+                    else {
+                      tcpSend('${mydevice.ipAddress}', 55443,
+                          '{"id":${mydevice.id},"method":"set_power","params":["off", "smooth", 500]}\r\n');
+                    }
+                  },
+                )
+              ],
+            )
+           // decoration: BoxDecoration(
+          //    color: Colors.blue,
+         //   ),
           ),
         ),
       ),
@@ -222,6 +268,7 @@ class OptionsRoute extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text("Second Route"),
+        backgroundColor: Colors.redAccent,
       ),
       body: Center(
         child: ElevatedButton(
