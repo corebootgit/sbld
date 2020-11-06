@@ -97,7 +97,7 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       drawer: Container(
-        width: 150,
+        width: 180,
         child: Drawer(
           child: DrawerHeader(
             duration: Duration(milliseconds: 1000),
@@ -171,11 +171,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
                     if(value){
                       tcpSend('${mydevice.ipAddress}', 55443,
-                          '{"id":${mydevice.id},"method":"set_power","params":["on", "smooth", 500]}\r\n');
+                          '{"id":${mydevice.id},"method":"set_power","params":["on", "smooth", 1000]}\r\n');
                     }
                     else {
                       tcpSend('${mydevice.ipAddress}', 55443,
-                          '{"id":${mydevice.id},"method":"set_power","params":["off", "smooth", 500]}\r\n');
+                          '{"id":${mydevice.id},"method":"set_power","params":["off", "smooth", 5000]}\r\n');
                     }
                   },
                 )
@@ -207,6 +207,12 @@ class _MyHomePageState extends State<MyHomePage> {
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            InteractiveViewer(
+              child: Image.asset(
+                  'assets/1178485-0-q80.jpg',
+                scale: 0.1,
+              ),
+            ),
             Slider(
               value: _currentSliderValue,
               min: 1,
